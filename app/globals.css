@@ -1,26 +1,41 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+@theme {
+  --font-sans: var(--font-pretendard), "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* 딥그린 — 브랜드 아이덴티티 · 주요 CTA 전용 */
+  --color-primary: #0e6e4c;
+  --color-primary-dark: #0a5940;
+  --color-primary-foreground: #ffffff;
+
+  /* 코랄핑크 — 오늘 마감 · 할인율 · 긴급성 전용 */
+  --color-accent: #ef5f7c;
+  --color-accent-foreground: #ffffff;
+
+  /* 소프트 라벤더 — 관심공구 · 인플루언서 · 보조 섹션/배지 전용 */
+  --color-lavender: #cdc3ec;
+  --color-lavender-dark: #a99bd9;
+  --color-lavender-foreground: #4a3d80;
+
+  /* 따뜻한 화이트 배경 + 차콜 텍스트의 뉴트럴 스케일 */
+  --color-surface: #faf9f6;
+
+  --color-neutral-50: #faf9f6;
+  --color-neutral-100: #f2efe9;
+  --color-neutral-200: #e5e1d7;
+  --color-neutral-300: #d3cdbe;
+  --color-neutral-400: #a29b8b;
+  --color-neutral-500: #766f61;
+  --color-neutral-600: #55503f;
+  --color-neutral-700: #433d31;
+  --color-neutral-900: #29251d;
+
+  --color-success: #0e6e4c;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-neutral-700);
 }

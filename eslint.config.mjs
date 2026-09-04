@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Reference-only design source, not part of this app.
+    "ai-studio-reference/**",
+    "ai-studio-reference_1/**",
+    "src/**",
+    "vite.config.ts",
   ]),
 ]);
 

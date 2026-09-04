@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "ai-studio-reference", "ai-studio-reference_1", "src", "vite.config.ts"]
 }

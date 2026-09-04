@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 디자인 참고용 / 실수로 중복 압축해제된 파일 — 이 앱 코드가 아니므로 커밋 대상 아님
+/ai-studio-reference/
+/ai-studio-reference_1/
+/src/
+/index.html
+/metadata.json
+/vite.config.ts
