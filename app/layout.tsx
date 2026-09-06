@@ -17,8 +17,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Vercel이 배포마다 자동으로 주입하는 값 — OG/트위터 이미지 절대 URL을 올바르게
+// 만들기 위함(로컬에서는 localhost로 대체). 별도 환경변수 설정 불필요.
+const siteUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "공구 아카이브",
+  metadataBase: new URL(siteUrl),
+  title: "ZEN-A | 함께 발견하는 공구",
   description: "뷰티·패션 인플루언서 공동구매 검색·아카이브 서비스",
 };
 

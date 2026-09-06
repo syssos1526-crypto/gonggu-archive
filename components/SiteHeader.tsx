@@ -47,12 +47,16 @@ export function SiteHeader({
         <div className="mx-auto flex max-w-7xl flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-6">
           <Link
             href="/"
-            className="flex shrink-0 items-center gap-2 text-base font-bold tracking-tight text-primary-foreground"
+            className="flex shrink-0 items-center gap-2.5 text-lg font-bold tracking-wide text-primary-foreground"
           >
-            <span className="flex h-6 w-6 items-center justify-center rounded-sm bg-white text-xs font-black text-primary">
-              A
-            </span>
-            공구 아카이브
+            {/* 공식 브랜드 아이콘 원본, 리사이즈/가공 없이 그대로 사용 */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/zen-a-icon.png"
+              alt="ZEN-A"
+              className="h-9 w-9 shrink-0 rounded-md object-cover"
+            />
+            ZEN-A
           </Link>
 
           <div className="sm:max-w-lg sm:flex-1">
