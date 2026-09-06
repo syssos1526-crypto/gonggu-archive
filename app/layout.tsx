@@ -21,10 +21,28 @@ const geistMono = Geist_Mono({
 // 만들기 위함(로컬에서는 localhost로 대체). 별도 환경변수 설정 불필요.
 const siteUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
 
+const title = "ZEN-A | 함께 발견하는 공구";
+const description = "뷰티·패션 인플루언서 공동구매 검색·아카이브 서비스";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "ZEN-A | 함께 발견하는 공구",
-  description: "뷰티·패션 인플루언서 공동구매 검색·아카이브 서비스",
+  title,
+  description,
+  // openGraph/twitter를 명시하지 않으면 title/description만으로는 og:title 등이
+  // 자동 생성되지 않는다. 이미지는 app/opengraph-image.tsx(1200x630, 파일
+  // 컨벤션)가 자동으로 채워주므로 여기선 title/description/type만 지정.
+  openGraph: {
+    title,
+    description,
+    type: "website",
+    siteName: "ZEN-A",
+    locale: "ko_KR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({
