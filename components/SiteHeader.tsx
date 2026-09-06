@@ -45,10 +45,7 @@ export function SiteHeader({
 
       <header className="sticky top-0 z-10 bg-primary px-4 py-2.5 shadow-sm sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-6">
-          <Link
-            href="/"
-            className="flex shrink-0 items-center gap-2.5 text-lg font-bold tracking-wide text-primary-foreground"
-          >
+          <Link href="/" className="flex shrink-0 items-center gap-2.5">
             {/* 공식 브랜드 아이콘 원본, 리사이즈/가공 없이 그대로 사용 */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -56,7 +53,10 @@ export function SiteHeader({
               alt="ZEN-A"
               className="h-9 w-9 shrink-0 rounded-md object-cover"
             />
-            ZEN-A
+            {/* 워드마크 글꼴 굵기·자간·색상은 브랜드 로고 시안 이미지 기준 */}
+            <span className="text-lg font-light tracking-[0.3em] text-[#d3b2f9]">
+              ZEN-A
+            </span>
           </Link>
 
           <div className="sm:max-w-lg sm:flex-1">
