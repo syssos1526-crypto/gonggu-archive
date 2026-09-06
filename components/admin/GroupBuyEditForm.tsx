@@ -61,7 +61,7 @@ export function GroupBuyEditForm({ groupBuy }: { groupBuy: AdminGroupBuyDetailRo
               defaultValue={groupBuy.price}
               className={INPUT_CLASS}
             />
-            {state.fieldErrors?.price && <p className="text-xs text-accent">{state.fieldErrors.price}</p>}
+            {state.fieldErrors?.price && <p className="text-xs text-accent-dark">{state.fieldErrors.price}</p>}
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -78,7 +78,7 @@ export function GroupBuyEditForm({ groupBuy }: { groupBuy: AdminGroupBuyDetailRo
               className={INPUT_CLASS}
             />
             {state.fieldErrors?.original_price && (
-              <p className="text-xs text-accent">{state.fieldErrors.original_price}</p>
+              <p className="text-xs text-accent-dark">{state.fieldErrors.original_price}</p>
             )}
           </div>
 
@@ -95,7 +95,7 @@ export function GroupBuyEditForm({ groupBuy }: { groupBuy: AdminGroupBuyDetailRo
               className={INPUT_CLASS}
             />
             {state.fieldErrors?.start_date && (
-              <p className="text-xs text-accent">{state.fieldErrors.start_date}</p>
+              <p className="text-xs text-accent-dark">{state.fieldErrors.start_date}</p>
             )}
           </div>
 
@@ -111,7 +111,7 @@ export function GroupBuyEditForm({ groupBuy }: { groupBuy: AdminGroupBuyDetailRo
               defaultValue={groupBuy.end_date}
               className={INPUT_CLASS}
             />
-            {state.fieldErrors?.end_date && <p className="text-xs text-accent">{state.fieldErrors.end_date}</p>}
+            {state.fieldErrors?.end_date && <p className="text-xs text-accent-dark">{state.fieldErrors.end_date}</p>}
           </div>
         </div>
 
@@ -144,8 +144,8 @@ export function GroupBuyEditForm({ groupBuy }: { groupBuy: AdminGroupBuyDetailRo
         </div>
       </div>
 
-      {state.fieldErrors?.groupBuy && <p className="text-sm text-accent">{state.fieldErrors.groupBuy}</p>}
-      {state.formError && <p className="text-sm font-semibold text-accent">{state.formError}</p>}
+      {state.fieldErrors?.groupBuy && <p className="text-sm text-accent-dark">{state.fieldErrors.groupBuy}</p>}
+      {state.formError && <p className="text-sm font-semibold text-accent-dark">{state.formError}</p>}
 
       <button
         type="submit"

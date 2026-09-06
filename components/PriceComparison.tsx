@@ -23,7 +23,7 @@ export function PriceComparison({
       )}
       <div className="flex items-end gap-2">
         {savings && (
-          <span className={`tabular-nums font-bold leading-none text-accent ${percentClass}`}>
+          <span className={`tabular-nums font-bold leading-none text-accent-dark ${percentClass}`}>
             {savings.percent}%
           </span>
         )}

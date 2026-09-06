@@ -53,8 +53,9 @@ export function SiteHeader({
                 alt="ZEN-A"
                 className="h-9 w-9 shrink-0 rounded-md object-cover"
               />
-              {/* 워드마크 글꼴 굵기·자간·색상은 브랜드 로고 시안 이미지 기준 */}
-              <span className="text-lg font-light tracking-[0.3em] text-[#d3b2f9]">
+              {/* 워드마크 글꼴 굵기·자간은 브랜드 로고 시안 기준 유지, 색상은
+                  새 팔레트의 Vanilla(딥그린 헤더 위 대비 9.6:1)로 갱신 */}
+              <span className="text-lg font-light tracking-[0.3em] text-primary-foreground">
                 ZEN-A
               </span>
             </Link>

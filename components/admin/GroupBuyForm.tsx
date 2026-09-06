@@ -39,7 +39,7 @@ export function GroupBuyForm() {
               required
               className={INPUT_CLASS}
             />
-            {state.fieldErrors?.price && <p className="text-xs text-accent">{state.fieldErrors.price}</p>}
+            {state.fieldErrors?.price && <p className="text-xs text-accent-dark">{state.fieldErrors.price}</p>}
           </div>
 
           <div className="flex flex-col gap-1.5">
@@ -55,7 +55,7 @@ export function GroupBuyForm() {
               className={INPUT_CLASS}
             />
             {state.fieldErrors?.original_price && (
-              <p className="text-xs text-accent">{state.fieldErrors.original_price}</p>
+              <p className="text-xs text-accent-dark">{state.fieldErrors.original_price}</p>
             )}
           </div>
 
@@ -65,7 +65,7 @@ export function GroupBuyForm() {
             </label>
             <input id="start_date" name="start_date" type="date" required className={INPUT_CLASS} />
             {state.fieldErrors?.start_date && (
-              <p className="text-xs text-accent">{state.fieldErrors.start_date}</p>
+              <p className="text-xs text-accent-dark">{state.fieldErrors.start_date}</p>
             )}
           </div>
 
@@ -74,7 +74,7 @@ export function GroupBuyForm() {
               종료일
             </label>
             <input id="end_date" name="end_date" type="date" required className={INPUT_CLASS} />
-            {state.fieldErrors?.end_date && <p className="text-xs text-accent">{state.fieldErrors.end_date}</p>}
+            {state.fieldErrors?.end_date && <p className="text-xs text-accent-dark">{state.fieldErrors.end_date}</p>}
           </div>
         </div>
 
@@ -94,7 +94,7 @@ export function GroupBuyForm() {
       </div>
 
       {state.duplicateWarning && (
-        <div className="flex flex-col gap-2 rounded-md border border-accent/30 bg-accent/10 p-4 text-sm text-accent">
+        <div className="flex flex-col gap-2 rounded-md border border-accent/30 bg-accent/10 p-4 text-sm text-accent-dark">
           <p className="font-semibold">{state.duplicateWarning}</p>
           <label className="flex items-center gap-2 text-neutral-700">
             <input
@@ -109,7 +109,7 @@ export function GroupBuyForm() {
       )}
       <input type="hidden" name="confirmed" value={confirmed ? 'true' : 'false'} />
 
-      {state.formError && <p className="text-sm font-semibold text-accent">{state.formError}</p>}
+      {state.formError && <p className="text-sm font-semibold text-accent-dark">{state.formError}</p>}
 
       <button
         type="submit"

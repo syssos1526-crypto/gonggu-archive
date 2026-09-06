@@ -26,9 +26,11 @@ export function HeroGroupBuyCard({ groupBuy }: { groupBuy: HomeGroupBuy }) {
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
 
+      {/* isUrgent(accent 배경)일 땐 accent-foreground로 대비 확보(흰 텍스트는
+          작은 글씨 기준 AA 미달) */}
       <span
-        className={`absolute left-4 top-4 rounded-full px-2.5 py-1 text-xs font-bold text-white ${
-          isUrgent ? 'bg-accent' : 'bg-primary'
+        className={`absolute left-4 top-4 rounded-full px-2.5 py-1 text-xs font-bold ${
+          isUrgent ? 'bg-accent text-accent-foreground' : 'bg-primary text-primary-foreground'
         }`}
       >
         {deadlineLabel}
@@ -41,7 +43,7 @@ export function HeroGroupBuyCard({ groupBuy }: { groupBuy: HomeGroupBuy }) {
         </p>
         <div className="mt-2 flex items-end gap-2">
           {savings && (
-            <span className="tabular-nums text-xl font-extrabold leading-none text-accent sm:text-2xl">
+            <span className="tabular-nums text-xl font-extrabold leading-none text-accent-dark sm:text-2xl">
               {savings.percent}%
             </span>
           )}

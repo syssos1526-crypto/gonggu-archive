@@ -141,7 +141,7 @@ export function InfluencerField({ error }: { error?: string }) {
         </div>
       )}
 
-      {error && <p className="text-xs text-accent">{error}</p>}
+      {error && <p className="text-xs text-accent-dark">{error}</p>}
     </div>
   )
 }

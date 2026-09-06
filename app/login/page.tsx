@@ -19,7 +19,7 @@ export default async function LoginPage({
       </p>
 
       {error && (
-        <p className="mt-5 break-keep rounded-xl bg-accent/10 px-4 py-3 text-sm text-accent">
+        <p className="mt-5 break-keep rounded-xl bg-accent/10 px-4 py-3 text-sm text-accent-dark">
           {error}
         </p>
       )}

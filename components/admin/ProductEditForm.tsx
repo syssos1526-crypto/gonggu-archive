@@ -28,7 +28,7 @@ export function ProductEditForm({ product }: { product: AdminProductRow }) {
             defaultValue={product.brand}
             className={INPUT_CLASS}
           />
-          {state.fieldErrors?.brand && <p className="text-xs text-accent">{state.fieldErrors.brand}</p>}
+          {state.fieldErrors?.brand && <p className="text-xs text-accent-dark">{state.fieldErrors.brand}</p>}
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -41,7 +41,7 @@ export function ProductEditForm({ product }: { product: AdminProductRow }) {
             defaultValue={product.name}
             className={INPUT_CLASS}
           />
-          {state.fieldErrors?.name && <p className="text-xs text-accent">{state.fieldErrors.name}</p>}
+          {state.fieldErrors?.name && <p className="text-xs text-accent-dark">{state.fieldErrors.name}</p>}
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -61,7 +61,7 @@ export function ProductEditForm({ product }: { product: AdminProductRow }) {
             ))}
           </select>
           {state.fieldErrors?.category && (
-            <p className="text-xs text-accent">{state.fieldErrors.category}</p>
+            <p className="text-xs text-accent-dark">{state.fieldErrors.category}</p>
           )}
         </div>
 
@@ -71,8 +71,8 @@ export function ProductEditForm({ product }: { product: AdminProductRow }) {
         </div>
       </div>
 
-      {state.fieldErrors?.product && <p className="text-sm text-accent">{state.fieldErrors.product}</p>}
-      {state.formError && <p className="text-sm font-semibold text-accent">{state.formError}</p>}
+      {state.fieldErrors?.product && <p className="text-sm text-accent-dark">{state.fieldErrors.product}</p>}
+      {state.formError && <p className="text-sm font-semibold text-accent-dark">{state.formError}</p>}
 
       <button
         type="submit"

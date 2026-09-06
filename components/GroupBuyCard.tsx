@@ -35,9 +35,11 @@ export function GroupBuyCard({
             className="h-full w-full transition-transform duration-500 group-hover:scale-105"
           />
 
+          {/* isUrgent(accent 배경)일 땐 accent-foreground(짙은색)로, 아니면
+              흰 텍스트로 — accent 위 흰 텍스트는 작은 글씨 기준 대비 미달이라 */}
           <span
-            className={`absolute left-1.5 top-1.5 rounded-full px-2 py-0.5 text-[11px] font-bold text-white shadow-sm ${
-              isUrgent ? 'bg-accent' : 'bg-neutral-900/80'
+            className={`absolute left-1.5 top-1.5 rounded-full px-2 py-0.5 text-[11px] font-bold shadow-sm ${
+              isUrgent ? 'bg-accent text-accent-foreground' : 'bg-neutral-900/80 text-white'
             }`}
           >
             {deadlineLabel}

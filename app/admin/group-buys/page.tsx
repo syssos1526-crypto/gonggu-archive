@@ -101,7 +101,7 @@ export default async function AdminGroupBuysPage({
                         status === 'ongoing'
                           ? 'bg-primary/10 text-primary'
                           : status === 'ended_today'
-                            ? 'bg-accent/10 text-accent'
+                            ? 'bg-accent/10 text-accent-dark'
                             : status === 'upcoming'
                               ? 'bg-lavender/30 text-lavender-foreground'
                               : 'bg-neutral-100 text-neutral-500'

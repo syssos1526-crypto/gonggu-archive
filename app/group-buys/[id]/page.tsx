@@ -79,11 +79,13 @@ export default async function GroupBuyDetailPage({
             <PriceComparison price={groupBuy.price} originalPrice={groupBuy.original_price} size="lg" />
           </div>
 
+          {/* isUrgent(accent 배경)일 땐 accent-foreground로 대비 확보(흰 텍스트는
+              작은 글씨 기준 AA 미달) */}
           <div
-            className={`rounded-md p-4 text-white ${isUrgent ? "bg-accent" : "bg-neutral-900"}`}
+            className={`rounded-md p-4 ${isUrgent ? "bg-accent text-accent-foreground" : "bg-neutral-900 text-white"}`}
           >
             <p className="text-sm font-bold">{deadlineLabel}</p>
-            <p className="mt-1 tabular-nums text-xs text-white/80">
+            <p className={`mt-1 tabular-nums text-xs ${isUrgent ? "text-accent-foreground/80" : "text-white/80"}`}>
               {formatFullDate(groupBuy.start_date)} ~ {formatFullDate(groupBuy.end_date)}
             </p>
           </div>

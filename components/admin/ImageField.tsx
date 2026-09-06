@@ -82,7 +82,7 @@ export function ImageField({ initialImageUrl = null }: { initialImageUrl?: strin
             className="text-sm text-neutral-600 file:mr-3 file:rounded-full file:border-0 file:bg-lavender/30 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-lavender-foreground"
           />
           {uploading && <p className="text-xs text-neutral-400">업로드 중...</p>}
-          {error && <p className="text-xs text-accent">{error}</p>}
+          {error && <p className="text-xs text-accent-dark">{error}</p>}
           <p className="text-xs text-neutral-400">jpg, jpeg, png, webp / 최대 5MB</p>
         </div>
       )}

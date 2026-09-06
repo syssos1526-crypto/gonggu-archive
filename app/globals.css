@@ -5,34 +5,45 @@
     BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 
-  /* 딥그린 — 브랜드 아이덴티티 · 주요 CTA 전용 */
-  --color-primary: #0e6e4c;
-  --color-primary-dark: #0a5940;
-  --color-primary-foreground: #ffffff;
+  /* Cal Poly Green(#26422A) — 브랜드 아이덴티티 · 헤더 · 주요 CTA 전용.
+     primary-foreground는 흰색 대신 Vanilla를 써서 딥그린 위에서 팔레트가
+     이어지도록 한다(대비 9.6:1, AAA 여유 통과). */
+  --color-primary: #26422a;
+  --color-primary-dark: #182b1b;
+  --color-primary-foreground: #ffeebc;
 
-  /* 코랄핑크 — 오늘 마감 · 할인율 · 긴급성 전용 */
-  --color-accent: #ef5f7c;
-  --color-accent-foreground: #ffffff;
+  /* Flame 오렌지(#EA672D) — 오늘 마감 · 할인율 · 긴급성 전용.
+     accent는 배지/뱃지 배경 등 "칠" 용도로만 그대로 쓰고, 흰 배경 위에
+     텍스트로 쓸 때는 accent-dark(더 짙은 변형, 대비 5:1)를 쓴다 — 원래
+     팔레트 색 그대로는 작은 글씨 기준 WCAG AA(4.5:1)를 못 넘긴다.
+     accent-foreground도 흰색 대신 짙은 색으로 바꿔 accent 배경 위 뱃지
+     텍스트가 실제로 읽히게 한다(흰 텍스트는 3.2:1로 AA 미달이었음). */
+  --color-accent: #ea672d;
+  --color-accent-dark: #b5501f;
+  --color-accent-foreground: #2b1608;
 
-  /* 소프트 라벤더 — 관심공구 · 인플루언서 · 보조 섹션/배지 전용 */
-  --color-lavender: #cdc3ec;
-  --color-lavender-dark: #a99bd9;
-  --color-lavender-foreground: #4a3d80;
+  /* Columbia Blue(#D2E8FF) — 관심공구 · 인플루언서 · 보조 섹션/배지 전용.
+     기존 '라벤더' 토큰명은 그대로 두고 색만 소프트 블루로 교체했다(전체
+     치환이 아니라, "보조/찜" 역할은 유지한 채 팔레트만 새로 매핑). */
+  --color-lavender: #d2e8ff;
+  --color-lavender-dark: #9cc6f2;
+  --color-lavender-foreground: #1e4a72;
 
-  /* 따뜻한 화이트 배경 + 차콜 텍스트의 뉴트럴 스케일 */
-  --color-surface: #faf9f6;
+  /* Vanilla(#FFEEBC) 웜 배경 + Bistre(#5D372A) 텍스트 기준의 뉴트럴 스케일.
+     카드/입력창 등 흰 배경(bg-white)은 가독성을 위해 코드에서 그대로 유지. */
+  --color-surface: #ffeebc;
 
-  --color-neutral-50: #faf9f6;
-  --color-neutral-100: #f2efe9;
-  --color-neutral-200: #e5e1d7;
-  --color-neutral-300: #d3cdbe;
-  --color-neutral-400: #a29b8b;
-  --color-neutral-500: #766f61;
-  --color-neutral-600: #55503f;
-  --color-neutral-700: #433d31;
-  --color-neutral-900: #29251d;
+  --color-neutral-50: #fffaf0;
+  --color-neutral-100: #fbf0d8;
+  --color-neutral-200: #f0e0bd;
+  --color-neutral-300: #ddc39a;
+  --color-neutral-400: #a2794f;
+  --color-neutral-500: #8a5f3f;
+  --color-neutral-600: #74503b;
+  --color-neutral-700: #674234;
+  --color-neutral-900: #5d372a;
 
-  --color-success: #0e6e4c;
+  --color-success: #26422a;
 }
 
 body {
