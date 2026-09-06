@@ -24,6 +24,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
             <Link href="/admin/products" className="hover:text-neutral-700">
               상품 관리
             </Link>
+            <Link href="/admin/analytics" className="hover:text-neutral-700">
+              분석
+            </Link>
             <Link href="/" className="hover:text-neutral-700">
               공개 사이트로
             </Link>

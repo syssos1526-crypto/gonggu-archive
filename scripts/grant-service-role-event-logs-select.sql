@@ -1,0 +1,21 @@
+-- =============================================================================
+-- ZEN-A — service_role에 event_logs SELECT 권한 추가 (관리자 분석 대시보드 전용)
+-- =============================================================================
+-- 이 파일은 실행하지 않았습니다. Supabase 대시보드 SQL Editor에서 직접
+-- 실행해 주세요.
+--
+-- 동의한 테스트 사용자(친구)들이 실제로 로그를 남기기 시작하면서,
+-- /admin/analytics가 세션 기반(authenticated) 클라이언트로 조회하던 방식은
+-- RLS("본인 행만")에 막혀 관리자 본인의 로그만 보이는 문제가 있었습니다.
+-- 관리자 분석 화면에서만 전체 event_logs를 집계할 수 있도록, service_role에
+-- SELECT 권한만 추가합니다. INSERT/UPDATE/DELETE는 절대 포함하지 않습니다 —
+-- 이 권한은 오직 lib/queries/analytics.ts(요청받은 대로 requireAdminUser()
+-- 통과 후에만 service_role 클라이언트를 쓰는 코드)에서만 사용됩니다.
+--
+-- anon/authenticated 권한과 event_logs의 기존 RLS 정책
+-- (event_logs_select_own, event_logs_insert_own — "본인 행만" 정책)은
+-- 전혀 건드리지 않습니다. 일반 사용자는 여전히 자신의 event_logs만
+-- SELECT/INSERT할 수 있습니다.
+-- =============================================================================
+
+grant select on public.event_logs to service_role;
