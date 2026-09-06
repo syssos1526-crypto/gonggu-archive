@@ -6,6 +6,7 @@ import { PageShell } from "@/components/PageShell";
 import { PriceComparison } from "@/components/PriceComparison";
 import { ProductThumbnail } from "@/components/ProductThumbnail";
 import { Section } from "@/components/Section";
+import { logEvent } from "@/lib/analytics/logEvent";
 import { formatFullDate, formatGroupBuyDeadline } from "@/lib/formatDeadline";
 import {
   getGroupBuyById,
@@ -36,6 +37,14 @@ export default async function GroupBuyDetailPage({
   if (user) {
     const productIds = [groupBuy.product_id, ...otherGroupBuys.map((gb) => gb.product_id)];
     interestedProductIds = await getInterestedProductIds(supabase, user.id, productIds);
+    await logEvent({
+      supabase,
+      userId: user.id,
+      eventType: "group_buy_viewed",
+      groupBuyId: groupBuy.id,
+      productId: groupBuy.product_id,
+      influencerId: groupBuy.influencer.id,
+    });
   }
 
   const deadlineLabel = formatGroupBuyDeadline(groupBuy.start_date, groupBuy.end_date);
@@ -81,7 +90,7 @@ export default async function GroupBuyDetailPage({
 
           {groupBuy.purchase_url ? (
             <a
-              href={groupBuy.purchase_url}
+              href={`/go/${groupBuy.id}`}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full bg-primary px-6 py-3 text-center text-sm font-bold text-primary-foreground hover:bg-primary-dark"

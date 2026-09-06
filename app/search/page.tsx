@@ -4,6 +4,7 @@ import { ProductSummaryCard } from "@/components/ProductSummaryCard";
 import { Section } from "@/components/Section";
 import { EmptyState } from "@/components/EmptyState";
 import { PageShell } from "@/components/PageShell";
+import { logEvent } from "@/lib/analytics/logEvent";
 import { getErrorMessage } from "@/lib/getErrorMessage";
 import {
   getInterestCounts,
@@ -69,22 +70,37 @@ export default async function SearchPage({
 
   if (q) {
     try {
+      const supabase = await createServerSupabaseClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      let resultCount = 0;
+
       if (tab === "group_buys") {
         ongoing = await searchOngoingGroupBuys(q);
         if (ongoing.length === 0) {
           past = await searchPastGroupBuys(q);
         }
 
-        const supabase = await createServerSupabaseClient();
-        const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           const productIds = [...ongoing, ...past].map((gb) => gb.product_id);
           interestedProductIds = await getInterestedProductIds(supabase, user.id, productIds);
         }
+        resultCount = ongoing.length > 0 ? ongoing.length : past.length;
       } else if (tab === "products") {
         products = await sortBySort(await searchProducts(q), sort, "product_id");
+        resultCount = products.length;
       } else {
         influencers = await sortBySort(await searchInfluencers(q), sort, "influencer_id");
+        resultCount = influencers.length;
+      }
+
+      if (user) {
+        await logEvent({
+          supabase,
+          userId: user.id,
+          eventType: "search_submitted",
+          metadata: { query: q, result_count: resultCount },
+        });
       }
     } catch (e) {
       error = getErrorMessage(e);

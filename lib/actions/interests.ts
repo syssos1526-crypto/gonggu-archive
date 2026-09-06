@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { logEvent } from '@/lib/analytics/logEvent'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 
 async function toggleInterest(column: 'product_id' | 'influencer_id', targetId: string) {
@@ -25,9 +26,23 @@ async function toggleInterest(column: 'product_id' | 'influencer_id', targetId: 
   if (existing) {
     const { error } = await supabase.from('interests').delete().eq('id', existing.id)
     if (error) throw error
+    await logEvent({
+      supabase,
+      userId: user.id,
+      eventType: 'interest_removed',
+      productId: column === 'product_id' ? targetId : null,
+      influencerId: column === 'influencer_id' ? targetId : null,
+    })
   } else {
     const { error } = await supabase.from('interests').insert({ user_id: user.id, [column]: targetId })
     if (error) throw error
+    await logEvent({
+      supabase,
+      userId: user.id,
+      eventType: 'interest_added',
+      productId: column === 'product_id' ? targetId : null,
+      influencerId: column === 'influencer_id' ? targetId : null,
+    })
   }
 
   // 어느 페이지에서 눌렀는지 특정하지 않고 전체를 갱신 — 스키마/성능 최적화보다
