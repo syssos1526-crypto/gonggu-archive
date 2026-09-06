@@ -21,8 +21,10 @@ export function ProductInterestOverlayButton({
   productId: string
   isInterested: boolean
 }) {
+  // z-index 없이 position:absolute만으로도 같은 카드의 일반 흐름 이미지 위에는
+  // 충분히 그려진다 — 헤더(z-30)와 굳이 z 값을 겨루게 하지 않는다.
   return (
-    <form action={toggleProductInterest} className="absolute top-3 right-3 z-10">
+    <form action={toggleProductInterest} className="absolute top-3 right-3">
       <input type="hidden" name="productId" value={productId} />
       <button
         type="submit"

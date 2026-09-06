@@ -38,7 +38,9 @@ export function SiteHeader({
         </div>
       </div>
 
-      <header className="sticky top-0 z-10 bg-primary px-4 py-2.5 shadow-sm sm:px-8">
+      {/* z-30: 카드 내부 오버레이(하트 z-10 이하)·모바일 하단내비(z-20)보다
+          항상 위에 그려지도록 사이트 전체 stacking에서 가장 높은 값을 둔다 */}
+      <header className="sticky top-0 z-30 bg-primary px-4 py-2.5 shadow-sm sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-6">
           {/* 모바일: 로고+아이콘이 한 줄, 검색창이 그 아래 별도 줄.
               데스크톱(sm:): sm:contents로 래퍼를 지워 로고-검색-아이콘이 다시 한 줄에 정렬. */}
