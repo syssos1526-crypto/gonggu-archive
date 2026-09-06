@@ -10,8 +10,9 @@ export function PriceComparison({
   size?: 'sm' | 'lg'
 }) {
   const savings = getSavings(price, originalPrice)
-  const priceClass = size === 'lg' ? 'text-2xl' : 'text-lg'
-  const percentClass = size === 'lg' ? 'text-xl' : 'text-lg'
+  // 위계: 할인가(가장 큼) > 할인율(중간, 코랄 강조) > 정가(취소선, 가장 작음)
+  const priceClass = size === 'lg' ? 'text-2xl' : 'text-xl'
+  const percentClass = size === 'lg' ? 'text-lg' : 'text-base'
 
   return (
     <div>

@@ -1,4 +1,5 @@
 import { GroupBuyCard } from "@/components/GroupBuyCard";
+import { HeroGroupBuyCard } from "@/components/HeroGroupBuyCard";
 import { PageShell } from "@/components/PageShell";
 import { PopularBrandChips } from "@/components/PopularBrandChips";
 import { Section } from "@/components/Section";
@@ -47,14 +48,27 @@ export default async function Home() {
     error = getErrorMessage(e)
   }
 
+  // 히어로: 진행중(+오늘마감) 중 마감이 가장 임박한 항목. 진행중 공구가
+  // 전혀 없으면 최근 등록 공구로 대체하되, formatGroupBuyDeadline이 실제
+  // status를 계산해 보여주므로 라벨이 항상 정확하다(가짜 "마감임박" 없음).
+  const heroGroupBuy =
+    homeData &&
+    ([...homeData.endingToday, ...homeData.ongoing].sort(
+      (a, b) => new Date(a.end_date).getTime() - new Date(b.end_date).getTime()
+    )[0] ??
+      homeData.recent[0] ??
+      null)
+
   return (
-    <PageShell activeCategory="all">
+    <PageShell activeCategory="all" activeNav="home">
       {error && (
         <p className="text-sm text-red-600">데이터를 불러오지 못했습니다: {error}</p>
       )}
 
       {homeData && (
         <div className="space-y-9">
+          {heroGroupBuy && <HeroGroupBuyCard groupBuy={heroGroupBuy} />}
+
           {homeData.popularBrands.length > 0 && (
             <section>
               <h2 className="mb-3 border-b-2 border-lavender-dark pb-2 text-lg font-bold text-neutral-900">

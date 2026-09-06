@@ -108,7 +108,7 @@ export default async function SearchPage({
   }
 
   return (
-    <PageShell searchValue={q}>
+    <PageShell searchValue={q} activeNav="search">
       {!q ? (
         <EmptyState message="검색어를 입력해주세요." />
       ) : (

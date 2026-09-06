@@ -35,7 +35,7 @@ export default async function FeedPage() {
   const hasNoInterests = !error && feed.length === 0;
 
   return (
-    <PageShell>
+    <PageShell activeNav="feed">
       <h1 className="text-xl font-bold text-neutral-900">관심 피드</h1>
       <p className="mt-1 break-keep text-sm text-neutral-500">
         관심 등록한 상품·인플루언서와 연결된, 아직 끝나지 않은 공구예요.
