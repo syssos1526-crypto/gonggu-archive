@@ -14,9 +14,20 @@ export function AdminShell({ children }: { children: ReactNode }) {
               ADMIN
             </span>
           </Link>
-          <Link href="/" className="text-xs font-medium text-neutral-500 hover:text-neutral-700">
-            공개 사이트로
-          </Link>
+          <nav className="flex items-center gap-4 text-xs font-medium text-neutral-500">
+            <Link href="/admin" className="hover:text-neutral-700">
+              대시보드
+            </Link>
+            <Link href="/admin/group-buys" className="hover:text-neutral-700">
+              공구 관리
+            </Link>
+            <Link href="/admin/products" className="hover:text-neutral-700">
+              상품 관리
+            </Link>
+            <Link href="/" className="hover:text-neutral-700">
+              공개 사이트로
+            </Link>
+          </nav>
         </div>
       </header>
 

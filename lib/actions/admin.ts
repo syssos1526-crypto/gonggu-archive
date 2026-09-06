@@ -3,7 +3,7 @@
 import { randomUUID } from 'node:crypto'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { ADMIN_CATEGORY_OPTIONS } from '@/lib/admin/constants'
+import { ADMIN_CATEGORY_OPTIONS, ALL_CATEGORY_VALUES } from '@/lib/admin/constants'
 import { requireAdminUser } from '@/lib/auth/admin'
 import { supabase } from '@/lib/supabase'
 import { createAdminSupabaseClient, describeAdminSupabaseError } from '@/lib/supabase/admin'
@@ -304,4 +304,134 @@ export async function createGroupBuyAction(
 
   revalidatePath('/admin')
   redirect(`/group-buys/${groupBuy.id}`)
+}
+
+export interface UpdateProductState {
+  formError?: string
+  fieldErrors?: Record<string, string>
+}
+
+// 기존 상품의 브랜드/상품명/카테고리/메인 이미지를 수정한다. 홈/검색/카테고리/
+// 공구상세 등 공개 페이지는 모두 force-dynamic이라 매 요청마다 새로 조회하므로,
+// products.image_url을 갱신하면 별도 캐시 무효화 없이 바로 반영된다.
+// 기존 Storage 파일은 여기서 지우지 않는다(요청된 정책).
+export async function updateProductAction(
+  _prevState: UpdateProductState,
+  formData: FormData
+): Promise<UpdateProductState> {
+  await requireAdminUser()
+
+  const productId = String(formData.get('product_id') ?? '').trim()
+  const brand = String(formData.get('product_brand') ?? '').trim()
+  const name = String(formData.get('product_name') ?? '').trim()
+  const category = String(formData.get('product_category') ?? '').trim()
+  const imageUrl = String(formData.get('product_image_url') ?? '').trim()
+
+  const fieldErrors: Record<string, string> = {}
+  if (!productId) fieldErrors.product = '잘못된 상품 요청입니다.'
+  if (!brand) fieldErrors.brand = '브랜드를 입력해주세요.'
+  if (!name) fieldErrors.name = '상품명을 입력해주세요.'
+  if (!ALL_CATEGORY_VALUES.includes(category)) fieldErrors.category = '카테고리를 선택해주세요.'
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors, formError: '입력값을 확인해주세요.' }
+  }
+
+  let admin: ReturnType<typeof createAdminSupabaseClient>
+  try {
+    admin = createAdminSupabaseClient()
+  } catch (error) {
+    return { formError: describeAdminSupabaseError(error) }
+  }
+
+  const { error } = await admin
+    .from('products')
+    .update({ brand, name, category, image_url: imageUrl || null })
+    .eq('id', productId)
+    .select('id')
+    .single()
+
+  if (error) {
+    return { formError: `상품 수정에 실패했습니다: ${describeAdminSupabaseError(error)}` }
+  }
+
+  revalidatePath('/admin/products')
+  redirect('/admin/products')
+}
+
+export interface UpdateGroupBuyScheduleState {
+  formError?: string
+  fieldErrors?: Record<string, string>
+}
+
+// 기존 공구의 일정/가격/링크만 수정한다. 상품·인플루언서 연결(product_id/
+// influencer_id)은 이번 범위에서 변경하지 않는다. 홈/검색/카테고리/공구상세
+// 등 공개 페이지는 모두 force-dynamic이라 다음 요청부터 바로 반영된다.
+export async function updateGroupBuyScheduleAction(
+  _prevState: UpdateGroupBuyScheduleState,
+  formData: FormData
+): Promise<UpdateGroupBuyScheduleState> {
+  await requireAdminUser()
+
+  const groupBuyId = String(formData.get('group_buy_id') ?? '').trim()
+  const priceRaw = String(formData.get('price') ?? '').trim()
+  const originalPriceRaw = String(formData.get('original_price') ?? '').trim()
+  const startDate = String(formData.get('start_date') ?? '').trim()
+  const endDate = String(formData.get('end_date') ?? '').trim()
+  const purchaseUrl = String(formData.get('purchase_url') ?? '').trim()
+  const postUrl = String(formData.get('post_url') ?? '').trim()
+
+  const fieldErrors: Record<string, string> = {}
+  if (!groupBuyId) fieldErrors.groupBuy = '잘못된 공구 요청입니다.'
+
+  const price = Number(priceRaw)
+  if (!priceRaw || Number.isNaN(price) || price < 0) {
+    fieldErrors.price = '공구가를 숫자로 입력해주세요.'
+  }
+
+  let originalPrice: number | null = null
+  if (originalPriceRaw) {
+    originalPrice = Number(originalPriceRaw)
+    if (Number.isNaN(originalPrice) || originalPrice < 0) {
+      fieldErrors.original_price = '정가를 숫자로 입력해주세요.'
+    }
+  }
+
+  if (!startDate) fieldErrors.start_date = '시작일을 입력해주세요.'
+  if (!endDate) fieldErrors.end_date = '종료일을 입력해주세요.'
+  if (startDate && endDate && endDate < startDate) {
+    fieldErrors.end_date = '종료일은 시작일보다 빠를 수 없습니다.'
+  }
+
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors, formError: '입력값을 확인해주세요.' }
+  }
+
+  let admin: ReturnType<typeof createAdminSupabaseClient>
+  try {
+    admin = createAdminSupabaseClient()
+  } catch (error) {
+    return { formError: describeAdminSupabaseError(error) }
+  }
+
+  const { error } = await admin
+    .from('group_buys')
+    .update({
+      price,
+      original_price: originalPrice,
+      start_date: startDate,
+      end_date: endDate,
+      purchase_url: purchaseUrl || null,
+      post_url: postUrl || null,
+    })
+    .eq('id', groupBuyId)
+    .select('id')
+    .single()
+
+  if (error) {
+    return { formError: `공구 수정에 실패했습니다: ${describeAdminSupabaseError(error)}` }
+  }
+
+  revalidatePath('/admin/group-buys')
+  redirect('/admin/group-buys')
 }

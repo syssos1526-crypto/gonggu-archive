@@ -7,10 +7,10 @@ const TAB_BUTTON = 'rounded-full px-3 py-1'
 const TAB_ACTIVE = 'bg-white text-primary shadow-sm'
 const TAB_INACTIVE = 'text-neutral-500'
 
-export function ImageField() {
+export function ImageField({ initialImageUrl = null }: { initialImageUrl?: string | null }) {
   const [mode, setMode] = useState<'url' | 'upload'>('url')
-  const [imageUrl, setImageUrl] = useState('')
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [imageUrl, setImageUrl] = useState(initialImageUrl ?? '')
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl ?? null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
