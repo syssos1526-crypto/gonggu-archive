@@ -17,9 +17,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Vercel이 배포마다 자동으로 주입하는 값 — OG/트위터 이미지 절대 URL을 올바르게
-// 만들기 위함(로컬에서는 localhost로 대체). 별도 환경변수 설정 불필요.
-const siteUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
+// VERCEL_URL은 "이번 배포"의 해시 URL이라 Deployment Protection에 걸려
+// 카카오톡 등 외부 크롤러가 og:image를 못 가져온다(302 → vercel.com SSO 로그인
+// 페이지로 리다이렉트되는 것을 실측 확인함). VERCEL_PROJECT_PRODUCTION_URL은
+// 프로젝트의 고정 프로덕션 도메인(gonggu-archive.vercel.app)이라 항상 공개
+// 접근 가능 — 이걸 우선 사용하고, 없을 때만 VERCEL_URL/localhost로 대체.
+// 둘 다 Vercel이 배포마다 자동 주입하는 값이라 별도 환경변수 설정 불필요.
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
 
 const title = "ZEN-A | 함께 발견하는 공구";
 const description = "뷰티·패션 인플루언서 공동구매 검색·아카이브 서비스";
