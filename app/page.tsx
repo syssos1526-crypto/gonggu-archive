@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { GroupBuyCard } from "@/components/GroupBuyCard";
 import { HeroGroupBuyCard } from "@/components/HeroGroupBuyCard";
 import { PageShell } from "@/components/PageShell";
@@ -9,7 +10,8 @@ import {
   getEndingTodayGroupBuys,
   getOngoingGroupBuys,
   getPopularBrands,
-  getRecentGroupBuys,
+  getRecentlyEndedGroupBuys,
+  getUpcomingGroupBuys,
 } from "@/lib/queries/home";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import type { BrandSummary, HomeGroupBuy } from "@/types/domain";
@@ -17,10 +19,13 @@ import type { BrandSummary, HomeGroupBuy } from "@/types/domain";
 // 진행중/오늘종료 판정이 현재 시각 기준이라 정적 프리렌더링을 막아야 함
 export const dynamic = "force-dynamic";
 
+const HOME_RECENTLY_ENDED_LIMIT = 4;
+
 type HomeData = {
   ongoing: HomeGroupBuy[]
   endingToday: HomeGroupBuy[]
-  recent: HomeGroupBuy[]
+  upcoming: HomeGroupBuy[]
+  recentlyEnded: HomeGroupBuy[]
   popularBrands: BrandSummary[]
 }
 
@@ -30,33 +35,37 @@ export default async function Home() {
   let interestedProductIds = new Set<string>()
 
   try {
-    const [ongoing, endingToday, recent, popularBrands] = await Promise.all([
+    const [ongoing, endingToday, upcoming, recentlyEnded, popularBrands] = await Promise.all([
       getOngoingGroupBuys(),
       getEndingTodayGroupBuys(),
-      getRecentGroupBuys(),
+      getUpcomingGroupBuys(),
+      getRecentlyEndedGroupBuys(HOME_RECENTLY_ENDED_LIMIT),
       getPopularBrands(),
     ])
-    homeData = { ongoing, endingToday, recent, popularBrands }
+    homeData = { ongoing, endingToday, upcoming, recentlyEnded, popularBrands }
 
     const supabase = await createServerSupabaseClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
-      const productIds = [...ongoing, ...endingToday, ...recent].map((gb) => gb.product_id)
+      const productIds = [...ongoing, ...endingToday, ...upcoming, ...recentlyEnded].map(
+        (gb) => gb.product_id
+      )
       interestedProductIds = await getInterestedProductIds(supabase, user.id, productIds)
     }
   } catch (e) {
     error = getErrorMessage(e)
   }
 
-  // 히어로: 진행중(+오늘마감) 중 마감이 가장 임박한 항목. 진행중 공구가
-  // 전혀 없으면 최근 등록 공구로 대체하되, formatGroupBuyDeadline이 실제
-  // status를 계산해 보여주므로 라벨이 항상 정확하다(가짜 "마감임박" 없음).
+  // 히어로: 진행중(+오늘마감) 중 마감이 가장 임박한 항목. 그런 공구가 전혀
+  // 없으면 오픈 예정 → 최근 종료 순으로 대체하되, formatGroupBuyDeadline이
+  // 실제 status를 계산해 보여주므로 라벨은 항상 정확하다(가짜 "마감임박" 없음).
   const heroGroupBuy =
     homeData &&
     ([...homeData.endingToday, ...homeData.ongoing].sort(
       (a, b) => new Date(a.end_date).getTime() - new Date(b.end_date).getTime()
     )[0] ??
-      homeData.recent[0] ??
+      homeData.upcoming[0] ??
+      homeData.recentlyEnded[0] ??
       null)
 
   return (
@@ -78,6 +87,7 @@ export default async function Home() {
             </section>
           )}
 
+          {/* 오늘 마감/마감 임박 흐름은 기존 그대로 유지 — 비어 있어도 안내 문구를 보여준다 */}
           <Section
             id="today-ending"
             title="🔥 오늘 종료 임박!"
@@ -94,35 +104,52 @@ export default async function Home() {
             ))}
           </Section>
 
-          <Section
-            title="진행 중인 인기 공구"
-            tone="primary"
-            isEmpty={homeData.ongoing.length === 0}
-            emptyText="현재 진행 중인 공구가 없습니다."
-          >
-            {homeData.ongoing.map((groupBuy) => (
-              <GroupBuyCard
-                key={groupBuy.id}
-                groupBuy={groupBuy}
-                isInterested={interestedProductIds.has(groupBuy.product_id)}
-              />
-            ))}
-          </Section>
+          {/* 아래 세 섹션은 상태별로 완전히 분리해서만 보여주고(진행중/오픈예정/종료
+              뒤섞임 없음), 데이터가 없으면 큰 빈 카드 대신 섹션 자체를 숨긴다 */}
+          {homeData.ongoing.length > 0 && (
+            <Section title="진행 중인 공구" tone="primary" isEmpty={false} emptyText="">
+              {homeData.ongoing.map((groupBuy) => (
+                <GroupBuyCard
+                  key={groupBuy.id}
+                  groupBuy={groupBuy}
+                  isInterested={interestedProductIds.has(groupBuy.product_id)}
+                />
+              ))}
+            </Section>
+          )}
 
-          <Section
-            title="🆕 방금 오픈했어요! 최근 등록 공구"
-            tone="lavender"
-            isEmpty={homeData.recent.length === 0}
-            emptyText="등록된 공구가 없습니다."
-          >
-            {homeData.recent.map((groupBuy) => (
-              <GroupBuyCard
-                key={groupBuy.id}
-                groupBuy={groupBuy}
-                isInterested={interestedProductIds.has(groupBuy.product_id)}
-              />
-            ))}
-          </Section>
+          {homeData.upcoming.length > 0 && (
+            <Section title="오픈 예정 공구" tone="lavender" isEmpty={false} emptyText="">
+              {homeData.upcoming.map((groupBuy) => (
+                <GroupBuyCard
+                  key={groupBuy.id}
+                  groupBuy={groupBuy}
+                  isInterested={interestedProductIds.has(groupBuy.product_id)}
+                />
+              ))}
+            </Section>
+          )}
+
+          {homeData.recentlyEnded.length > 0 && (
+            <Section
+              title="최근 종료된 공구"
+              isEmpty={false}
+              emptyText=""
+              headerAction={
+                <Link href="/ended" className="shrink-0 text-xs font-semibold text-primary hover:underline">
+                  종료 공구 모아보기
+                </Link>
+              }
+            >
+              {homeData.recentlyEnded.map((groupBuy) => (
+                <GroupBuyCard
+                  key={groupBuy.id}
+                  groupBuy={groupBuy}
+                  isInterested={interestedProductIds.has(groupBuy.product_id)}
+                />
+              ))}
+            </Section>
+          )}
         </div>
       )}
     </PageShell>

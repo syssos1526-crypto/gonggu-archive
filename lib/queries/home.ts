@@ -40,11 +40,33 @@ export async function getEndingTodayGroupBuys(limit = 10): Promise<HomeGroupBuy[
     .filter((row): row is HomeGroupBuy => row !== null)
 }
 
-export async function getRecentGroupBuys(limit = 10): Promise<HomeGroupBuy[]> {
+// 오픈 예정: 시작일이 오늘보다 뒤(today < start_date). 날짜 문자열로만 비교.
+export async function getUpcomingGroupBuys(limit = 10): Promise<HomeGroupBuy[]> {
+  const today = new Date().toISOString().slice(0, 10)
+
   const { data, error } = await supabase
     .from('group_buys')
     .select(GROUP_BUY_SELECT)
-    .order('created_at', { ascending: false })
+    .gt('start_date', today)
+    .order('start_date', { ascending: true })
+    .limit(limit)
+
+  if (error) throw error
+
+  return ((data ?? []) as unknown as GroupBuyRow[])
+    .map(toHomeGroupBuy)
+    .filter((row): row is HomeGroupBuy => row !== null)
+}
+
+// 최근 종료: 종료일이 오늘보다 앞(end_date < today), 최근에 끝난 순.
+export async function getRecentlyEndedGroupBuys(limit = 10): Promise<HomeGroupBuy[]> {
+  const today = new Date().toISOString().slice(0, 10)
+
+  const { data, error } = await supabase
+    .from('group_buys')
+    .select(GROUP_BUY_SELECT)
+    .lt('end_date', today)
+    .order('end_date', { ascending: false })
     .limit(limit)
 
   if (error) throw error

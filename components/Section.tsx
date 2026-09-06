@@ -16,6 +16,7 @@ export function Section({
   tone = 'neutral',
   isEmpty,
   emptyText,
+  headerAction,
   children,
 }: {
   id?: string
@@ -23,13 +24,15 @@ export function Section({
   tone?: SectionTone
   isEmpty: boolean
   emptyText: string
+  headerAction?: ReactNode
   children: ReactNode
 }) {
   return (
     <section id={id}>
-      <h2 className={`border-b-2 pb-2 text-lg font-bold text-neutral-900 ${TONE_BORDER[tone]}`}>
-        {title}
-      </h2>
+      <div className={`flex items-center justify-between gap-3 border-b-2 pb-2 ${TONE_BORDER[tone]}`}>
+        <h2 className="text-lg font-bold text-neutral-900">{title}</h2>
+        {headerAction}
+      </div>
       {isEmpty ? (
         <div className="mt-3.5">
           <EmptyState message={emptyText} />
